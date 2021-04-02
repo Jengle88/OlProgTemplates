@@ -1,4 +1,3 @@
-//Goodbye stupid girls & Hello L0u1Za, Codeforces and my friends(nobody)
 #define _CRT_SECURE_NO_WARNINGS
 #include <vector>
 #include <iostream>
@@ -30,91 +29,91 @@ template <class T>
 using pt = std::pair<T, T>;
 using namespace std;
 
-struct hoba //sub-arrays
+struct subArray //sub-arrays
 {
-	hoba(int n)
+	subArray(int n)
 	{
-		sq.reserve(n);
+		arr.reserve(n);
 	}
-	int l, r;
-	vector<pt<int>>sq;
+	int left, right;
+	vector<pt<int>>arr;
 };
 
-void build(vector<hoba> &a)// sub-arrays
+void build(vector<subArray> &a)// sub-arrays
 {
 	int n;
 	cin >> n;
-	int q = ceil(sqrt(n));
-	a.resize(q, hoba(q));
+	int root2 = ceil(sqrt(n));
+	a.resize(root2, subArray(root2));
 	int in;
 	for (int i = 0; i < n; i++)
 	{
 		cin >> in;
-		a[i / q].sq.push_back({ in,i });
+		a[i / root2].arr.emplace_back(in, i);
 	}
-	if (a.back().sq.size() == 0)
+	if (a.back().arr.empty())
 		a.pop_back();
 	for (int i = 0; i < a.size(); i++)
 	{
-		a[i].l = i * q;
-		a[i].r = i * q + q - 1;
+		a[i].left = i * root2;
+		a[i].right = i * root2 + root2 - 1;
 	}
-	a.back().r = n - 1;
+	a.back().right = n - 1;
 }
 
-struct hoba2 //full array 
+struct fullArray //full array
 {
-	int x, l;
+	int x, left;
 };
 
-void build(vector<hoba2> &a)// full array
+void build(vector<fullArray> &a)// full array
 {
 	int n;
 	cin >> n;
-	int sq = ceil(sqrt(n));
+	int root2 = ceil(sqrt(n));
 	a.resize(n);
 	for (int i = 0; i < n; i++)
 	{
 		cin >> a[i].x;
-		a[i].l = i / sq * sq;
+		a[i].left = i / root2 * root2;
 	}
 }
 
-struct hoba3 //graph
+struct sqrtGraph //graph
 {
 	int x;
-	bool isheavy = false;
+	bool isHeavy = false;
 	vector<int> ed, heavy;
-	hoba3() { ed.reserve(210); heavy.reserve(155); }
+	sqrtGraph() { ed.reserve(210); heavy.reserve(155); }
 };
 
-void build(vector<hoba3> &a, vector<int> &heavy)// graph (heavy-light-node)
+void build(vector<sqrtGraph> &a, vector<int> &heavy)// graph (heavy-light-node)
 {						// heavy node no more than sqrt(n)
-	int n, m, i1, i2;			// if node is light, then we can do bfs
+	int n, m, idx1, idx2;			// if node is light, then we can do bfs
 	cin >> n >> m;				// else we can update nearest heavy edges
 	for (int i = 1; i <= n; i++)
 	{
 		cin >> a[i].x;
 	}
-	int sq = ceil(sqrt(n)); // 1e3?
-	heavy.reserve(sq);
+	int root2 = ceil(sqrt(n)); // 1e3?
+	heavy.reserve(root2);
 	for (int i = 0; i < m; i++)
 	{
-		cin >> i1 >> i2;
-		//i1--; i2--;
-		a[i1].ed.push_back(i2);
-		a[i2].ed.push_back(i1);
-		if (a[i1].ed.size() > sq && !a[i1].isheavy)
+		cin >> idx1 >> idx2;
+		//idx1--; idx2--;
+		a[idx1].ed.push_back(idx2);
+		a[idx2].ed.push_back(idx1);
+		if (a[idx1].ed.size() > root2 && !a[idx1].isHeavy)
 		{
-			heavy.push_back(i1);
-			a[i2].heavy.push_back(i1);
-			a[i1].isheavy = true;
+			heavy.push_back(idx1);
+			a[idx2].heavy.push_back(idx1);
+			a[idx1].isHeavy = true;
 		}
-		if (a[i2].ed.size() > sq && !a[i2].isheavy)
+		if (a[idx2].ed.size() > root2 && !a[idx2].isHeavy)
 		{
-			heavy.push_back(i2);
-			a[i1].heavy.push_back(i2);
-			a[i2].isheavy = true;
+			heavy.push_back(idx2);
+			a[idx1].heavy.push_back(idx2);
+			a[idx2].isHeavy = true;
 		}
 	}
 }
@@ -123,13 +122,11 @@ void build(vector<hoba3> &a, vector<int> &heavy)// graph (heavy-light-node)
 
 
 int main() {
-	#ifndef ONLINE_JUDGE
-		freopen("input.txt", "r", stdin);
-		//freopen("output.txt", "w", stdout);
-	#else
-	#endif
-	//freopen("input.txt", "r", stdin);
-   	//freopen("input1.txt", "w", stdout);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+	//freopen("output.txt", "w", stdout);
+#else
+#endif
 	ios_base::sync_with_stdio(0);
 	cin.tie(0); cout.tie(0);
 

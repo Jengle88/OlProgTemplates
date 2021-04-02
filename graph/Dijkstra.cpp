@@ -1,6 +1,6 @@
-//Goodbye stupid girls & Hello L0u1Za, Codeforces and my friends(nobody)
 #define _CRT_SECURE_NO_WARNINGS
-#define inf 1e9
+#define INF 1e9
+
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -22,72 +22,62 @@
 #include <type_traits>
 #include <deque>
 #include <unordered_map>
+
 //#include <Windows.h>
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double ld;
-template <class T>
+template<class T>
 using pt = std::pair<T, T>;
 using namespace std;
 
-struct ed
-{
+struct edge {
 	int to;
-	int len = 0;
+	int length = 0;
 };
-struct hoba
-{
-	int dist = inf;
-	vector<ed> a;
+struct graph {
+	int dist = INF;
+	vector<edge> arrEdge;
 };
-vector<hoba> gr;
 
-void djk(int st)
-{
-	priority_queue<pt<int>> q;//len,to
-	gr[st].dist = 0;
-	q.push({ 0,st });
-	while (!q.empty())
-	{
-		auto pr = q.top();//len, to
-		q.pop();
-		for (int i = 0; i < gr[pr.second].a.size(); i++)
-		{
-			auto pr2 = gr[pr.second].a[i];//to and len
-			if (gr[pr2.to].dist > pr.first + pr2.len)
-			{
-				gr[pr2.to].dist = pr.first + pr2.len;
-				q.push({ gr[pr2.to].dist,pr2.to });
+void Dijkstra(int start, vector<graph> &gr) {
+	priority_queue<pt<int>> que;//length,to
+	gr[start].dist = 0;
+	que.push({0, start});
+	while (!que.empty()) {
+		auto edgeQue = que.top();//length, to
+		que.pop();
+		for (int i = 0; i < gr[edgeQue.second].arrEdge.size(); i++) {
+			auto edgeGraph = gr[edgeQue.second].arrEdge[i];//to and length
+			if (gr[edgeGraph.to].dist > edgeQue.first + edgeGraph.length) {
+				gr[edgeGraph.to].dist = edgeQue.first + edgeGraph.length;
+				que.push({gr[edgeGraph.to].dist, edgeGraph.to});
 			}
 		}
 	}
 }
 
 
-void example()
-{
-	int n, s, f;
-	cin >> n >> s >> f;
+void example() {
+	int n, start, finish;
+	cin >> n >> start >> finish;
 	int i1;
-	gr.resize(n + 1);
-	for (int i = 1; i <= n; i++)
-	{
-		for (int j = 1; j <= n; j++)
-		{
+	vector<graph> graph(n + 1);
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
 			cin >> i1;
 			if (i == j)
 				continue;
-			if (i1 != -1)
-			{
-				gr[i].a.push_back({ j,i1 });
+			if (i1 != -1) {
+				graph[i].arrEdge.push_back({j, i1});
 			}
 		}
 	}
-	djk(s);
-	if (gr[f].dist == inf)
+	Dijkstra(start, graph);
+	if (graph[finish].dist == INF)
 		cout << -1;
 	else
-		cout << gr[f].dist;
+		cout << graph[finish].dist;
 }
 
 int main() {
@@ -97,8 +87,9 @@ int main() {
 #else
 #endif
 	ios_base::sync_with_stdio(0);
-	cin.tie(0); cout.tie(0);
-	
+	cin.tie(0);
+	cout.tie(0);
+
 	example();
 	return 0;
 }

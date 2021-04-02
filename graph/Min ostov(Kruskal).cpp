@@ -1,4 +1,3 @@
-////Goodbye stupid girls & Hello L0u1Za, Codeforces and my friends(nobody)
 #define _CRT_SECURE_NO_WARNINGS
 #include <vector>
 #include <iostream>
@@ -30,35 +29,35 @@ using pt = std::pair<T, T>;
 using namespace std;
 
 
-struct ed
+struct edge
 {
-	int a, b;// a->b
-	int w;	 // weight
+	int from, to;// from->to
+	int weight;	 // weight
 };
 
 struct snmachka //DSU
 {
-	int val,size; //root,size set
+	int value,size; //root,size set
 
 };
-vector<snmachka> mnoj;//set of our edges
+vector<snmachka> snmSet;//set of our edges
 
 int findik(int x)//find
 {
-	if (mnoj[x].val != x)
-		mnoj[x].val = findik(mnoj[x].val);
-	return mnoj[x].val;
+	if (snmSet[x].value != x)
+		snmSet[x].value = findik(snmSet[x].value);
+	return snmSet[x].value;
 }
 
-void unionchik(int x,int y)//unoin
+void unionchik(int x,int y)//union
 {
 	x = findik(x), y = findik(y);
-	if (mnoj[x].val == mnoj[y].val)
+	if (snmSet[x].value == snmSet[y].value)
 		return;
-	if (mnoj[x].size > mnoj[y].size)
+	if (snmSet[x].size > snmSet[y].size)
 		swap(x, y);
-	mnoj[x].val = y;
-	mnoj[y].size += mnoj[x].size;
+	snmSet[x].value = y;
+	snmSet[y].size += snmSet[x].size;
 }
 
 bool good(int x, int y)//no cycle
@@ -67,36 +66,33 @@ bool good(int x, int y)//no cycle
 }
 
 int main() {
-	#ifndef ONLINE_JUDGE
-		freopen("input.txt", "r", stdin);
-		//freopen("output.txt", "w", stdout);
-	#else
-	#endif
-	//freopen("input2.txt", "r", stdin);
-	//freopen("output.txt", "w", stdout);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+	//freopen("output.txt", "weight", stdout);
+#else
+#endif
 	ios_base::sync_with_stdio(0);
 	cin.tie(0); cout.tie(0);
 	int n, m;
 	cin >> n >> m;
-	vector<ed> a;
-	mnoj.resize(n+1);
+	vector<edge> graph(m);
+	snmSet.resize(n + 1);
 	for (int i = 1; i <= n; i++)
 	{
-		mnoj[i].val = i; //start root
+		snmSet[i].value = i; //start root
 	}
-	a.resize(m);
 	for (int i = 0; i < m; i++)
 	{
-		cin >> a[i].a >> a[i].b >> a[i].w;
+		cin >> graph[i].from >> graph[i].to >> graph[i].weight;
 	}
-	sort(a.begin(), a.end(), [](ed a, ed b) {return a.w < b.w; }); //sort by weight
+	sort(graph.begin(), graph.end(), [](edge a, edge b) {return a.weight < b.weight; }); //sort by weight
 	ll sum = 0;
 	for (int i = 0; i < m; i++)
 	{
-		if (good(a[i].a, a[i].b)) // if a.root != b.root -> no cycle in set with (a,b)
+		if (good(graph[i].from, graph[i].to)) // if from.root != to.root -> no cycle in set with (from,to)
 		{
-			sum += a[i].w;
-			unionchik(a[i].a, a[i].b);
+			sum += graph[i].weight;
+			unionchik(graph[i].from, graph[i].to);
 		}
 	}
 	cout << sum;

@@ -1,5 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
-#define inf 1e9
+#define INF 1e9
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -29,29 +29,28 @@ template <class T>
 using pt = std::pair<T, T>;
 using namespace std;
 
-struct ed
+struct edge
 {
-	ll to, len;
+	ll to, length;
 };
 
-struct vert
+struct vertex
 {
-	ll dist = inf;
-	vector<ed> a;
+	ll dist = INF;
+	vector<edge> edges;
 };
-vector<vert> gr;
 
-void ford_belm(int st)
+void Ford_Bellman(int start, vector<vertex>& graph)
 {
-	gr[st].dist = 0;
-	for (int i = 1; i < gr.size(); i++)
+	graph[start].dist = 0;
+	for (int i = 1; i < graph.size(); i++)//for all edges each time
 	{
-		for (int j = 1; j < gr.size(); j++)	  //for all edges each time
-		{					  //for all edges each time
-			for (auto val : gr[j].a)          //for all edges each time
+		for (int j = 1; j < graph.size(); j++)//for all edges each time	  
+		{					  					
+			for (auto edge : graph[j].edges)//for all edges each time          
 			{
-				if(gr[j].dist != inf)//if not infinity, then decrease
-					gr[val.to].dist = min(gr[val.to].dist, gr[j].dist + val.len);
+				if(graph[j].dist != INF)//if not infinity, then decrease
+					graph[edge.to].dist = min(graph[edge.to].dist, graph[j].dist + edge.length);
 			}
 		}
 	}
@@ -61,21 +60,21 @@ void example()
 {
 	int n, m;
 	cin >> n >> m;
-	gr.resize(n + 1);
-	int i1, i2, w;
+	vector<vertex> graph(n + 1);
+	int i1, i2, length;
 	for (int i = 0; i < m; i++)
 	{
-		cin >> i1 >> i2 >> w;
-		gr[i1].a.push_back({ i2,w });
-		//gr[i2].a.push_back({ i1,w });// NOOOOOOOOOOOOOOOOOOOOOOOO!!11!1!!!!
+		cin >> i1 >> i2 >> length;
+		graph[i1].edges.push_back({i2, length });
+		//graph[i2].edges.push_back({ i1,length });// NOOOOOOOOOOOOOOOOOOOOOOOO!!11!1!!!!
 	}
-	ford_belm(1);
+	Ford_Bellman(1, graph);
 	for (int i = 1; i <= n; i++)
 	{
-		if (gr[i].dist != inf)
-			cout << gr[i].dist << ' ';
+		if (graph[i].dist != INF)
+			cout << graph[i].dist << ' ';
 		else
-			cout << inf << ' ';
+			cout << INF << ' ';
 	}
 }
 
