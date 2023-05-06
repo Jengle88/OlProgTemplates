@@ -14,6 +14,7 @@
 #pragma GCC optimize("branch-target-load-optimize2")
 #pragma GCC optimize("btr-bb-exclusive")
 #define _CRT_SECURE_NO_WARNINGS
+
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -35,23 +36,25 @@
 #include <type_traits>
 #include <deque>
 #include <unordered_map>
+
 //#include <Windows.h>
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double ld;
-template <class T>
+template<class T>
 using pt = std::pair<T, T>;
 using namespace std;
 
 
 int main() {
 #ifndef ONLINE_JUDGE
-	freopen("input.txt", "r", stdin);
-	//freopen("output.txt", "w", stdout);
+    freopen("input.txt", "r", stdin);
+    //freopen("output.txt", "w", stdout);
 #else
 #endif
-	ios_base::sync_with_stdio(0);
-	cin.tie(0); cout.tie(0);
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
 
-	return 0;
+    return 0;
 }
